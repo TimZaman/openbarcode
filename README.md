@@ -1,6 +1,8 @@
 # OpenBarcode C++ Library (libopenbarcode)
 For 1D (barcode) and 2D (areacode) decoding and encoding.
 
+# -> ! UNDER DEVELOPMENT ! <-
+
 This repository contains the OpenBarcode source files for libopenbarcode. It solely depends on [opencv](https://github.com/itseez/opencv).
 
 Written in C++, this library can be used on any platform; Mac, Windows, iOS, Android, etc.
