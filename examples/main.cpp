@@ -14,7 +14,7 @@
 -   THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
 -   EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
 -   WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PAR-TICULAR PURPOSE.
- --------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
 */
 
 #include <iostream>
@@ -23,7 +23,9 @@
 #include <mutex>
 #include <unistd.h>
 #include <sys/types.h>
- 
+
+#include "openbarcode/openbarcode_version.h"
+#include "openbarcode/options.h"  
 #include "openbarcode/detector.h" 
 #include "openbarcode/decoder.h" 
 
@@ -31,8 +33,16 @@
 int main( int argc, char* argv[] ){
 	std::cout << "main() : this program provides a libopenbarcode test." << std::endl;
 
-	openbarcode::Decoder dc;
-	openbarcode::Detector dt;
+	//Create the options
+	openbarcode::Options opts;
+
+	//Create the decoder and
+	openbarcode::Decoder dc(&opts);
+
+	// Create the detector by passing in the options and decoder
+	openbarcode::Detector dt(&opts, &dc);
+
+	dt.Detect();
 
 
 	std::cout << "END main()" << std::endl;

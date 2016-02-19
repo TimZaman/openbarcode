@@ -1,6 +1,6 @@
 /**
 --------------------------------------------------------------------------------
--   Module      :   detector.h
+-   Module      :   detector.cpp
 -   Description :   1D and 2D C++ Barcode Library
 -   Author      :   Tim Zaman, 18-FEB-2016
 --------------------------------------------------------------------------------
@@ -17,7 +17,7 @@
 namespace openbarcode {
 
 
-Detector::Detector(){
+Detector::Detector(Options *opts, Decoder * dc) : opts_(opts), dc_(dc){
 	std::cout << "Detector::Detector()" << std::endl;
 }
 
@@ -26,11 +26,26 @@ Detector::~Detector(){
 
 }
 
-template<typename T>
-int Detector::setOption(int opt_id, const T value){
+//template<typename T>
+//int Detector::setOption(int opt_id, const T value){
+//
+//	return 1;
+//}
 
+int Detector::Detect(){
+	std::cout << "Detector::~Detect()" << std::endl;
+
+	return RET_NONE_FOUND;
 }
 
 
 
 } //END NAMESPACE openbarcode
+
+
+
+
+
+
+
+

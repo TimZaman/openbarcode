@@ -14,7 +14,7 @@
 -   THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
 -   EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
 -   WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PAR-TICULAR PURPOSE.
- --------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
 */
 
 #ifndef DETECTOR_H
@@ -23,50 +23,31 @@
 #include <string>
 #include <vector>
 
-#include "openbarcode_version.h"
+#include "openbarcode/toolkit/sort.h"
+
+#include "openbarcode/options.h"  
 #include "openbarcode/decoder.h"
 
 namespace openbarcode {
 
-/*
- * Return values
- */
-enum { RET_SUCCESS   = 0, 
-
-     };
-
-/*
- * All possible option keys
- */
-enum { OPT_CODETYPE   = 0,
-     };
-
-/*
- * Code type values for the kind of code to detect
- */ 
-enum { DET_BARCODE    = 1<<0, // 0x01 (any code with bars)
-       DET_DATAMATRIX = 1<<1, // 0x02
-       DET_QR         = 1<<2, // 0x04
-     };
-
-
 class Detector {
 
 	public:
-		Detector();
+		Detector(Options *, Decoder *);
 		~Detector();
 
 		int Detect();
 
-		template<typename T>
-		int setOption(int opt_id, const T value);
+		//template<typename T>
+		//int setOption(int, const T);
 
 	private:
 		/*
 		 * codetype_ is the type of code it should look for with this detector
 		 */
 		int codetype_;
-		
+		Decoder * dc_;
+		Options * opts_;
 		
 };
 

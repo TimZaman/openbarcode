@@ -1,15 +1,14 @@
 /**
 --------------------------------------------------------------------------------
--   Module      :   decoder.h
+-   Module      :   decoder.cpp
 -   Description :   1D and 2D C++ Barcode Library
 -   Author      :   Tim Zaman, 18-FEB-2016
 --------------------------------------------------------------------------------
 */
 
-#include <limits>
-#include <map>
-#include <clocale>
-#include <assert.h>
+//#include <map>
+//#include <clocale>
+//#include <assert.h>
 #include <iostream>
 
 #include "openbarcode/decoder.h"
@@ -17,7 +16,7 @@
 namespace openbarcode {
 
 
-Decoder::Decoder(){
+Decoder::Decoder(Options * opts) : opts_(opts) {
 	std::cout << "Decoder::Decoder()" << std::endl;
 }
 
@@ -26,10 +25,10 @@ Decoder::~Decoder(){
 
 }
 
-template<typename T>
-int Decoder::setOption(int opt_id, const T value){
-
-}
+//template<class T>
+//int Decoder::setOption(int opt_id, T value){
+//	return 1;
+//}
 
 
 

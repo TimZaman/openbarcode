@@ -48,7 +48,6 @@ INCLUDE_DIRECTORIES( ${INCLUDE_DIRECTORIES}  /usr/local/include /usr/include /op
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/..)
 
-add_definitions(-DPRINTGIT)
 set(GITVERSIONHDR ${CMAKE_CURRENT_BINARY_DIR}/gitversion.h)
 
 	
