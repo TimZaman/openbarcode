@@ -6,12 +6,9 @@
 --------------------------------------------------------------------------------
 */
 
-//#include <map>
-//#include <clocale>
-//#include <assert.h>
 #include <iostream>
 
-#include "openbarcode/decoder.h"
+#include "libopenbarcode/decoder.h"
 
 namespace openbarcode {
 
@@ -25,11 +22,23 @@ Decoder::~Decoder(){
 
 }
 
-//template<class T>
-//int Decoder::setOption(int opt_id, T value){
-//	return 1;
-//}
+
 
 
 
 } //END NAMESPACE openbarcode
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

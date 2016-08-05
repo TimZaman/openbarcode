@@ -28,15 +28,15 @@
 # -------------------------------------------------------------------------------------- 
 
 
-project( openbarcode )
+project( libopenbarcode )
 cmake_minimum_required(VERSION 2.8.11)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")	
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")    
 
 MESSAGE( STATUS "CMAKE_SYSTEM_VERSION: " ${CMAKE_SYSTEM_VERSION} " ON SYSTEM " ${CMAKE_SYSTEM_NAME} )
 
 if(APPLE) #For MacPorts
-	SET(CMAKE_PREFIX_PATH "/opt/local/lib/cmake" ${CMAKE_PREFIX_PATH})
+    SET(CMAKE_PREFIX_PATH "/opt/local/lib/cmake" ${CMAKE_PREFIX_PATH})
 endif()
 
 #SET(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} /usr/local/lib ) 
@@ -50,31 +50,34 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 set(GITVERSIONHDR ${CMAKE_CURRENT_BINARY_DIR}/gitversion.h)
 
-	
+    
 #OpenCV
 find_package(OpenCV 3 REQUIRED)
 set(OpenCV_LIBS opencv_core opencv_imgproc opencv_imgcodecs  ) #opencv3
 
 
 if (APPLE)
-	SET(CMAKE_PREFIX_PATH "/opt/local/lib/cmake" ${CMAKE_PREFIX_PATH})
-	if(POLICY CMP0042) #No idea what does does but something with rpath or MACOSX_RPATH
-	   cmake_policy(SET CMP0042 OLD)
-	endif()
+    SET(CMAKE_PREFIX_PATH "/opt/local/lib/cmake" ${CMAKE_PREFIX_PATH})
+    if(POLICY CMP0042) #No idea what does does but something with rpath or MACOSX_RPATH
+       cmake_policy(SET CMP0042 OLD)
+    endif()
 
-	if(POLICY CMP0043) #No idea what does does but supresses warnings bonanza
-	   cmake_policy(SET CMP0043 OLD)
-	endif()
+    if(POLICY CMP0043) #No idea what does does but supresses warnings bonanza
+       cmake_policy(SET CMP0043 OLD)
+    endif()
 endif()
 
 if (NOT APPLE)
-	include_directories(/usr/lib/x86_64-linux-gnu)
+    include_directories(/usr/lib/x86_64-linux-gnu)
 endif()
 
 add_definitions(-DMYSHAREDLIB_LIBRARY)
 
 # Add an library compiled from .cpp
-add_library( openbarcode SHARED detector.cpp decoder.cpp ${GITVERSIONHDR})
+add_library( openbarcode SHARED 
+    detector.cpp detector_barcode.cpp
+    decoder.cpp decoder_code39.cpp 
+    toolkit/sort.h ${GITVERSIONHDR})
 
 # Link the target to the libraries
 target_link_libraries( openbarcode ${OpenCV_LIBS} stdc++ c++ )
@@ -94,12 +97,12 @@ add_dependencies(openbarcode githeader)
 
 
 if(APPLE)
-	INSTALL(FILES _build/libopenbarcode.dylib  DESTINATION /opt/openbarcode/lib/ )
+    INSTALL(FILES _build/libopenbarcode.dylib  DESTINATION /usr/local/lib/ )
 else() #Linux
-	INSTALL(FILES _build/libopenbarcode.so  DESTINATION /opt/openbarcode/lib/ )
+    INSTALL(FILES _build/libopenbarcode.so  DESTINATION /usr/local/lib/ )
 endif()
 
-INSTALL(FILES openbarcode.h _build/openbarcode_version.h DESTINATION /opt/openbarcode/include/ ) 
+INSTALL(FILES openbarcode.h openbarcode_version.h DESTINATION /usr/local/include/libopenbarcode/ ) 
 
 
 

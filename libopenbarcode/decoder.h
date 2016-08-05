@@ -17,48 +17,31 @@
  --------------------------------------------------------------------------------
 */
 
-#ifndef DECODER_H
-#define DECODER_H
+#ifndef OPENBARCODE_DECODER_H
+#define OPENBARCODE_DECODER_H
 
 #include <string>
 #include <vector>
 
-#include "openbarcode/toolkit/sort.h"
+#include "libopenbarcode/toolkit/sort.h"
 
-#include "openbarcode/options.h"  
-#include "openbarcode/openbarcode_version.h"
-
+#include "libopenbarcode/options.h"  
+#include "libopenbarcode/openbarcode_version.h"
 
 namespace openbarcode {
 
-
 class Decoder {
 
-	public:
-		Decoder(Options *);
-		~Decoder();
-
-		//int setOption(int opt_id, int value);
-
-	private:
-		/*
-		 * codetype_ is the type of code it should look for with this detector
-		 */
-		int codetype_;
-		
-		Options * opts_;
-		
+ public:
+    Decoder(Options *);
+    ~Decoder();
+    
+ private:
+    Options * opts_;
+        
 };
 
 }
 
 
 #endif
-
-
-
-
-
-
-
-

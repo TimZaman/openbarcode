@@ -27,7 +27,6 @@
 # 
 # -------------------------------------------------------------------------------------- 
 
-
 project( openbarcode )
 cmake_minimum_required(VERSION 2.8.11)
 
@@ -50,22 +49,16 @@ else()
 	INCLUDE_DIRECTORIES(/usr/local/include/)
 	LINK_DIRECTORIES(/usr/lib/x86_64-linux-gnu/)
 	LINK_DIRECTORIES(/usr/lib)
-	LINK_DIRECTORIES(/usr/local/lib)
 endif()
 
-if (1) # USE CURRENT COMPILED VERSION
+if (1) # USE LOCAL COMPILED VERSION
 	INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../)
-	INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../openbarcode/toolkit)
-	INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../openbarcode/_build)
-	LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../openbarcode/_build)
+	#INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libopenbarcode/toolkit)
+	INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libopenbarcode)
+	LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libopenbarcode/_build)
 else () # USE INSTALLED LIB AND HEADERS
-	if (APPLE)
-		INCLUDE_DIRECTORIES(/opt/openbarcode/include)
-		LINK_DIRECTORIES(/opt/openbarcode/lib)
-	else()
-		INCLUDE_DIRECTORIES(/opt/openbarcode/include/)
-		LINK_DIRECTORIES(/opt/openbarcode/lib/)
-	endif()
+	INCLUDE_DIRECTORIES(/usr/local/openbarcode/include/ )
+	LINK_DIRECTORIES(/usr/local/lib)
 endif()
 
 

@@ -1,6 +1,6 @@
 /**
 --------------------------------------------------------------------------------
--   Module      :   options.h
+-   Module      :   detector.h
 -   Description :   1D and 2D C++ Barcode Library
 -   Author      :   Tim Zaman, 18-FEB-2016
 --------------------------------------------------------------------------------
@@ -17,61 +17,37 @@
 ---------------------------------------------------------------------------------
 */
 
-#ifndef OPTIONS_H
-#define OPTIONS_H
+#ifndef OPENBARCODE_DETECTOR_H
+#define OPENBARCODE_DETECTOR_H
 
-#include <iostream>
 #include <string>
 #include <vector>
 
-#include "openbarcode/toolkit/sort.h"
+#include "libopenbarcode/options.h"  
+#include "libopenbarcode/decoder.h"
 
 namespace openbarcode {
 
-/*
- * Return values
- */
-enum { RET_SUCCESS    = 0, 
-	   RET_NONE_FOUND = 1,
+class Detector {
 
-     };
+ public:
+    Detector(Options *, Decoder *);
+    Detector(Options *, std::vector< Decoder * >);
+    ~Detector();
 
-/*
- * All possible option keys
- */
-enum { OPT_CODETYPE   = 0,
-	   OPT_SEARCH_MULTIPLE = 1,
-	   OPT_DPI = 2,
-     };
+    virtual int Detect();
 
-/*
- * Code type values for the kind of code to detect
- */ 
-enum { DET_BARCODE    = 1<<0, // 0x01 (any code with bars)
-       DET_DATAMATRIX = 1<<1, // 0x02
-       DET_QR         = 1<<2, // 0x04
-     };
+    //template<typename T>
+    //int setOption(int, const T);
 
-
-class Options {
-
-	public:
-		Options(){
-			std::cout << "Options::Options()" << std::endl;
-
-		}
-
-		~Options(){
-			std::cout << "Options::~Options()" << std::endl;
-
-		}
-
-	private:
-		/*
-		 * codetype_ is the type of code it should look for with this detector
-		 */
-		//int codetype_;
-		
+ private:
+    /*
+     * codetype_ is the type of code it should look for with this detector
+     */
+    int codetype_;
+    std::vector< Decoder *> decoders_;
+    Options * opts_;
+        
 };
 
 }
