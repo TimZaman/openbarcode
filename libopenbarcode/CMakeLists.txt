@@ -39,8 +39,6 @@ if(APPLE) #For MacPorts
     SET(CMAKE_PREFIX_PATH "/opt/local/lib/cmake" ${CMAKE_PREFIX_PATH})
 endif()
 
-#SET(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} /usr/local/lib ) 
-
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}) # make local *.cmake available
 
 LINK_DIRECTORIES( ${LINK_DIRECTORIES}  /usr/local/lib /usr/lib /opt/local/lib)
@@ -77,7 +75,8 @@ add_definitions(-DMYSHAREDLIB_LIBRARY)
 add_library( openbarcode SHARED 
     detector.cpp detector_barcode.cpp
     decoder.cpp decoder_code39.cpp 
-    toolkit/sort.h ${GITVERSIONHDR})
+    toolkit/sort.h toolkit/utils_opencv.cpp toolkit/utils_general.cpp
+    )
 
 # Link the target to the libraries
 target_link_libraries( openbarcode ${OpenCV_LIBS} stdc++ c++ )
@@ -94,7 +93,6 @@ add_custom_command(OUTPUT ${GITVERSIONHDR} COMMAND ${CMAKE_COMMAND} -DSOURCE_DIR
 set_source_files_properties(${GITVERSIONHDR} PROPERTIES GENERATED TRUE HEADER_FILE_ONLY TRUE)
 # explicitly say that the executable depends on the githeader
 add_dependencies(openbarcode githeader)
-
 
 if(APPLE)
     INSTALL(FILES _build/libopenbarcode.dylib  DESTINATION /usr/local/lib/ )

@@ -24,7 +24,16 @@
 #include <string>
 #include <vector>
 
+#include <opencv2/opencv.hpp>
+
 namespace openbarcode {
+
+struct code {
+    int code_type;
+    std::string data;
+    std::string data_raw;
+    cv::RotatedRect rotrect;
+};
 
 /*
  * Return values
@@ -43,7 +52,7 @@ enum { OPT_CODETYPE   = 0,
      };
 
 /*
- * Code type values for the kind of code to detect
+ * Detector code types
  */ 
 enum { DET_BARCODE    = 1<<0, // 0x01 (any code with bars)
        DET_DATAMATRIX = 1<<1, // 0x02

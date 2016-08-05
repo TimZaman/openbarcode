@@ -23,7 +23,7 @@
 #include <string>
 #include <vector>
 
-#include "libopenbarcode/toolkit/sort.h"
+#include <opencv2/opencv.hpp>
 
 #include "libopenbarcode/options.h"  
 #include "libopenbarcode/openbarcode_version.h"
@@ -36,6 +36,8 @@ class Decoder {
     Decoder(Options *);
     ~Decoder();
     
+    virtual int Decode(cv::Mat, openbarcode::code *);
+
  private:
     Options * opts_;
         

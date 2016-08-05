@@ -26,8 +26,6 @@
 
 #include "libopenbarcode/options.h"
 #include "libopenbarcode/decoder.h"
-#include "libopenbarcode/openbarcode_version.h"
-
 
 namespace openbarcode {
 
@@ -37,9 +35,11 @@ class DecoderCode39 : public Decoder {
     DecoderCode39(Options *);
     ~DecoderCode39();
 
+    int Decode(cv::Mat, openbarcode::code *);
+ private:
+    int DecodeBinary(cv::Mat, openbarcode::code *);
 };
 
 }
-
 
 #endif

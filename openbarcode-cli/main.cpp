@@ -24,6 +24,8 @@
 #include <unistd.h>
 #include <sys/types.h>
 
+#include <opencv2/opencv.hpp>
+
 #include "libopenbarcode/openbarcode_version.h"
 #include "libopenbarcode/options.h"  
 
@@ -40,6 +42,9 @@ int main(int argc, char* argv[] ) {
 	std::cout << "OPENBARCODE_VERSION   = " << OPENBARCODE_VERSION << std::endl;
 	std::cout << "OPENBARCODE_BUILDDATE = " << OPENBARCODE_BUILDDATE << std::endl;
 
+	// Load a sample image
+	cv::Mat im = cv::imread("../../sample_images/c39.png");
+
 	// Create the options
 	openbarcode::Options opts;
 	//opts.set
@@ -51,7 +56,11 @@ int main(int argc, char* argv[] ) {
 	// Create the detector by passing in the options and decoder
 	openbarcode::DetectorBarcode dt_bc(&opts, decoders);
 
+	dt_bc.setImage(im);
+
 	dt_bc.Detect();
+
+	dt_bc.Decode();
 
 	for (int i = 0; i < decoders.size(); i++) {
 		delete decoders[i];

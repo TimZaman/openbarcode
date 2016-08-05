@@ -73,7 +73,7 @@ add_executable( openbarcode-bin main.cpp ) #openbarcode-bin name is a workaround
 SET_TARGET_PROPERTIES(openbarcode-bin PROPERTIES OUTPUT_NAME openbarcode) #workaround to have executable and library with same name (openbarcode)
 
 # Link the target to the libraries
-target_link_libraries( openbarcode-bin openbarcode stdc++)
+target_link_libraries( openbarcode-bin openbarcode stdc++ ${OpenCV_LIBS})
 
 
 

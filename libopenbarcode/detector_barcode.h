@@ -39,6 +39,10 @@ class DetectorBarcode : public Detector {
     ~DetectorBarcode();
 
     int Detect();
+
+ private:
+    void Ransac(std::vector<cv::RotatedRect>, int, double, std::vector< std::vector<int> > &, std::vector<cv::Vec4f> &, const cv::Mat);
+
 };
 
 }

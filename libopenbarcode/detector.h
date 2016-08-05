@@ -23,6 +23,8 @@
 #include <string>
 #include <vector>
 
+#include <opencv2/opencv.hpp>
+
 #include "libopenbarcode/options.h"  
 #include "libopenbarcode/decoder.h"
 
@@ -35,30 +37,21 @@ class Detector {
     Detector(Options *, std::vector< Decoder * >);
     ~Detector();
 
+    void setImage(cv::Mat);
+
     virtual int Detect();
 
-    //template<typename T>
-    //int setOption(int, const T);
+    int Decode();
 
- private:
-    /*
-     * codetype_ is the type of code it should look for with this detector
-     */
-    int codetype_;
+ protected:
+    std::vector< openbarcode::code > code_candidates_;
+    std::vector< openbarcode::code > codes_;
     std::vector< Decoder *> decoders_;
     Options * opts_;
-        
+    cv::Mat image_;
+
 };
 
 }
 
-
 #endif
-
-
-
-
-
-
-
-
