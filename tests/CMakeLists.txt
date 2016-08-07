@@ -9,7 +9,7 @@
 #
 #
 # --------------------------------------------------------------------------------------
-# -   Module      :   CmakeLists.txt of the example cli
+# -   Module      :   CmakeLists.txt of the c++ unit testing
 # -   Description :   CMakeList of OpenBarcode
 # -   Author      :   Tim Zaman, 18-FEB-2016
 # --------------------------------------------------------------------------------
@@ -27,7 +27,7 @@
 # 
 # -------------------------------------------------------------------------------------- 
 
-project( openbarcode )
+project( openbarcode-test )
 cmake_minimum_required(VERSION 2.8.11)
 
 if (APPLE)
@@ -61,22 +61,17 @@ else () # USE INSTALLED LIB AND HEADERS
 	LINK_DIRECTORIES(/usr/local/lib)
 endif()
 
-
-
+# GoogleTest
+INCLUDE_DIRECTORIES(/Users/tzaman/googletest/googletest/include)
+LINK_DIRECTORIES(/Users/tzaman/googletest/_build/googlemock/gtest)
 
 #OpenCV
 find_package(OpenCV 3 REQUIRED)
 set(OpenCV_LIBS opencv_core opencv_imgproc opencv_imgcodecs  ) #opencv3
 
 # Add an executable compiled from .cpp
-add_executable( openbarcode-bin main.cpp ) #openbarcode-bin name is a workaround, see below
-SET_TARGET_PROPERTIES(openbarcode-bin PROPERTIES OUTPUT_NAME openbarcode) #workaround to have executable and library with same name (openbarcode)
+add_executable( openbarcode-test main.cpp ) #openbarcode-bin name is a workaround, see below
+SET_TARGET_PROPERTIES(openbarcode-test PROPERTIES OUTPUT_NAME openbarcode-test) # workaround to have executable and library with same name (openbarcode)
 
 # Link the target to the libraries
-target_link_libraries( openbarcode-bin openbarcode stdc++ ${OpenCV_LIBS})
-
-
-
-
-
-
+target_link_libraries( openbarcode-test openbarcode stdc++ gtest ${OpenCV_LIBS})

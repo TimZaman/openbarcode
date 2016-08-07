@@ -19,10 +19,6 @@
 
 #include <iostream>
 #include <string>
-#include <fstream>
-#include <mutex>
-#include <unistd.h>
-#include <sys/types.h>
 
 #include <opencv2/opencv.hpp>
 
@@ -61,14 +57,9 @@ int main(int argc, char* argv[] ) {
 	// Create the decoder(s)
 	std::vector< openbarcode::Decoder * > decoders;
 	decoders.push_back(new openbarcode::DecoderCode39(&opts));
-
-	// Create the detector by passing in the options and decoder
 	openbarcode::DetectorBarcode dt_bc(&opts, decoders);
-
 	dt_bc.setImage(im);
-
 	dt_bc.Detect();
-
 	dt_bc.Decode();
 
 	for (int i = 0; i < decoders.size(); i++) {

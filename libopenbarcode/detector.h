@@ -43,9 +43,22 @@ class Detector {
 
     int Decode();
 
+    int numCodesFound() { // @TODO(tzaman): put in src
+        return codes_.size();
+    }
+
+    std::vector< std::string > getCodeStrings() { // @TODO(tzaman): put in src
+        std::vector< std::string > only_strings(codes_.size());
+        for (int i = 0; i < codes_.size(); i++) {
+            only_strings[i] = this->codes_[i].data;
+        }
+        return only_strings;
+    }
+
  protected:
     std::vector< openbarcode::code > code_candidates_;
     std::vector< openbarcode::code > codes_;
+    std::vector< openbarcode::code > dt_bc;
     std::vector< Decoder *> decoders_;
     Options * opts_;
     cv::Mat image_;

@@ -12,7 +12,7 @@ For 1D (barcode) and 2D (areacode) decoding and encoding.
 
 This repository contains the OpenBarcode source files for libopenbarcode. It solely depends on [opencv](https://github.com/itseez/opencv).
 
-Written in C++11, this library is intended to be cross-platform; Mac, Windows, iOS, Android, etc.
+Written in C++11, this library is intended to be cross-platform; Mac, Windows, iOS, Android, etc. C++ Unit testing with [GoogleTest](https://github.com/google/googletest).
 
 ## Design Principles
 
@@ -25,7 +25,7 @@ This should be good for almost all use cases, except when you are trying to capt
 
 Assumptions:
 - Fully scale, translation and rotation invariant.
-- Only minor shear, perspective and spherical distortion allowed.
+- Only *minor* shear, perspective and spherical distortion allowed.
 - Print quality has to be just fair, minor print defects and 'sparse ink' allowed.
 - Print geometry should be correct. No skipped print-lines.
 - Print background/foreground constrast needs to be good.

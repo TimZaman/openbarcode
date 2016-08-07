@@ -12,6 +12,8 @@ _*.h
 build/
 _build/
 opt/
+lib/
+bin/
 *.pkg
 *.mpkg
 *.zip
