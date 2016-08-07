@@ -44,7 +44,7 @@ static const char* C39_Strings[C39_CHARACTERS] = {"nnnwwnwnn", "wnnwnnnnw", "nnw
 
 static const std::map< std::string, char > generateDecodingMap() {
     std::map<std::string, char> mapping;
-    for(int i = 0; i < C39_CHARACTERS; i++) {
+    for (int i = 0; i < C39_CHARACTERS; i++) {
         mapping[C39_Strings[i]] = C39_Characters[i];
     }
     return mapping;
@@ -57,6 +57,7 @@ namespace openbarcode {
 
 DecoderCode39::DecoderCode39(Options * opts) : Decoder(opts) {
     std::cout << "DecoderCode39::DecoderCode39()" << std::endl;
+
 }
 
 DecoderCode39::~DecoderCode39() {

@@ -40,7 +40,10 @@ class Decoder {
 
  private:
     Options * opts_;
-        
+
+ private:
+    DISALLOW_COPY_AND_ASSIGN(Decoder);
+
 };
 
 }

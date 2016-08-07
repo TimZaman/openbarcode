@@ -49,6 +49,15 @@ int main(int argc, char* argv[] ) {
 	openbarcode::Options opts;
 	//opts.set
 
+	opts.setValue("int", 1337);
+	opts.setValue("string", "test");
+
+	//cout << opts.getValue("int") << " ; " << opts.getValue("string") << endl;
+	cout << opts.getValue<int>("int") << endl;
+	int i = opts.getValue<int>("int");
+
+	cout << opts.getValue<int>("default-test", 1234) << endl;
+
 	// Create the decoder(s)
 	std::vector< openbarcode::Decoder * > decoders;
 	decoders.push_back(new openbarcode::DecoderCode39(&opts));
@@ -69,12 +78,3 @@ int main(int argc, char* argv[] ) {
 
 	std::cout << "END main()" << std::endl;
 }
-
-
-
-
-
-
-
-
-

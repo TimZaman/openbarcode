@@ -26,6 +26,14 @@
 
 #include <opencv2/opencv.hpp>
 
+#include <boost/variant.hpp> // Note this is a header-only library (no linking yay!)
+
+#define DISALLOW_COPY_AND_ASSIGN(TypeName)                                    \
+  void operator=(const TypeName&) = delete;                                   \
+  void operator=(TypeName&&) = delete;                                        \
+  TypeName(const TypeName&) = delete;                                         \
+  TypeName(TypeName&&) = delete
+
 namespace openbarcode {
 
 struct code {
@@ -40,7 +48,7 @@ struct code {
  */
 enum { RET_SUCCESS    = 0, 
        RET_NONE_FOUND = 1,
-
+       RET_EPIC_FAIL = 1337
      };
 
 /*
@@ -54,9 +62,9 @@ enum { OPT_CODETYPE   = 0,
 /*
  * Detector code types
  */ 
-enum { DET_BARCODE    = 1<<0, // 0x01 (any code with bars)
-       DET_DATAMATRIX = 1<<1, // 0x02
-       DET_QR         = 1<<2, // 0x04
+enum { DET_BARCODE    = 1 << 0, // 0x01 (any code with bars)
+       DET_DATAMATRIX = 1 << 1, // 0x02
+       DET_QR         = 1 << 2, // 0x04
      };
 
 class Options {
@@ -71,12 +79,30 @@ class Options {
         std::cout << "Options::~Options()" << std::endl;
     }
 
+    template<typename _T>
+    _T getValue(std::string key) {
+        return boost::get<_T>(this->optionmap_.at(key)); // .at() throws exception when it doesnt exist
+    }
+
+    template<typename _T>
+    _T getValue(std::string key, _T default_value) {
+        // Uses a default value when no option key exists in the mapping
+        if (this->optionmap_.count(key)) {
+            return this->getValue<_T>(key);
+        } else {
+            return default_value;
+        }
+    }
+
+    template<typename _T>
+    int setValue(std::string key, _T value) {
+        this->optionmap_[key] = value;
+        return RET_SUCCESS; // @TODO(tzaman): check for duplicates etc
+    }
+
  private:
-    /*
-     * codetype_ is the type of code it should look for with this detector
-     */
-    //int codetype_;
-            
+    std::map<std::string, boost::variant<int, double, std::string> > optionmap_; // @TODO(tzaman): tuple with description?
+
 };
 
 }

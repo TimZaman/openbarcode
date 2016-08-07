@@ -23,6 +23,7 @@ Decoder::~Decoder(){
 
 int Decoder::Decode(cv::Mat image, openbarcode::code * current_code){
     std::cout << "Decoder::Decode()" << std::endl;
+    return RET_EPIC_FAIL;
 }
 
 } //END NAMESPACE openbarcode

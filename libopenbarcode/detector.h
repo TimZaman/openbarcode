@@ -49,6 +49,8 @@ class Detector {
     std::vector< Decoder *> decoders_;
     Options * opts_;
     cv::Mat image_;
+ private:
+    DISALLOW_COPY_AND_ASSIGN(Detector);
 
 };
 
