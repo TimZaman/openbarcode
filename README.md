@@ -10,7 +10,7 @@ For 1D (barcode) and 2D (areacode) decoding and encoding.
 |/__\|/__\|/__\|/__\|/__\|/__\|/__\|/__\|/__\|/__\|/__\|
 ```
 
-This repository contains the OpenBarcode source files for libopenbarcode. It solely depends on [opencv](https://github.com/itseez/opencv).
+This repository contains the OpenBarcode source files for libopenbarcode. It solely depends on [OpenCV 3](https://github.com/itseez/opencv).
 
 Written in C++11, this library is intended to be cross-platform; Mac, Windows, iOS, Android, etc. C++ Unit testing with [GoogleTest](https://github.com/google/googletest).
 

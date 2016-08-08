@@ -17,6 +17,7 @@
 
 static const char C39_SENTINEL = '*';
 static const int C39_CHARACTERS = 44;
+static const int C39_BARS_PER_CHAR = 9;
 static const char C39_SENTINEL_STRING[] = "nwnnwnwnn";
 
 static const char C39_Characters[C39_CHARACTERS] = {'0','1','2','3','4','5','6','7',
@@ -73,19 +74,19 @@ int DecoderCode39::DecodeBinary(cv::Mat image, openbarcode::code * current_code)
     std::vector<double> intervals_black;
     std::vector<double> intervals_white;
     //We will now perform smart measurement of the white and black stripes.
-    char prev_char=image.at<char>(0);
+    char prev_char = image.at<char>(0);
     int current_length=0;
-    for (int i=1; i<image.rows * image.cols; i++){
+    for (int i = 1; i < image.rows * image.cols; i++) {
         char current_char=image.at<char>(i);
         current_length++;
-        if (current_char!=prev_char){
+        if (current_char != prev_char) {
             //Switch
-            if (prev_char==0){
+            if (prev_char == 0) {
                 intervals_black.push_back(current_length);
             } else {
                 intervals_white.push_back(current_length);
             }
-            current_length=0; //reset
+            current_length = 0; //reset
         }
         prev_char = current_char;
     }
@@ -94,10 +95,11 @@ int DecoderCode39::DecodeBinary(cv::Mat image, openbarcode::code * current_code)
 
     int width_wide_narrow_division_white = util::calcMeanOfQuarterAndThreeQuarterPercentile(intervals_white);
     int width_wide_narrow_division_black = util::calcMeanOfQuarterAndThreeQuarterPercentile(intervals_black);
-    //Account for the fact that character spacing is thin and more thin divisors that wide
+    
+    // Account for the fact that character spacing is thin and more thin divisors that wide
     width_wide_narrow_division_white *= 1.3;
 
-    //Account for the fact that at most 2/5 are black wide.
+    // Account for the fact that at most 2/5 are black wide.
     width_wide_narrow_division_black *= 1.1;
 
     double width_max = std::max(width_wide_narrow_division_white, width_wide_narrow_division_black) * 2.5;
@@ -119,15 +121,15 @@ int DecoderCode39::DecodeBinary(cv::Mat image, openbarcode::code * current_code)
 
 
     std::vector<char> words;
-    char prevbc=255; //white is start and base color
-    int lengthnow=0;
-    for (int i=0; i<image.rows * image.cols; i++){
+    char prevbc = 255; // White is start and base color
+    int lengthnow = 0;
+    for (int i = 0; i < image.rows * image.cols; i++) {
         char curbc = image.at<char>(i); //Current value (1/0)
-        if (curbc!=prevbc){ //1/0 switch
+        if (curbc != prevbc) { //1/0 switch
             //if ((lengthnow > width_min) && (lengthnow < width_max)) {
             if ((lengthnow < width_max)) {
                 int division_width_threshold;
-                if (prevbc==0){
+                if (prevbc == 0) {
                     division_width_threshold = width_wide_narrow_division_black;
                 } else {
                     division_width_threshold = width_wide_narrow_division_white;
@@ -139,7 +141,7 @@ int DecoderCode39::DecodeBinary(cv::Mat image, openbarcode::code * current_code)
                 words.push_back('X');
             }
             //cout << lengthnow << " ";
-            lengthnow=0; //Reset length
+            lengthnow = 0; //Reset length
         }
         prevbc = curbc;
         lengthnow++;
@@ -158,45 +160,44 @@ int DecoderCode39::DecodeBinary(cv::Mat image, openbarcode::code * current_code)
     cout << endl;
     */
 
-
     //Generate the decoding map
     //std::map<std::string, char> decoding = generateDecodingMap();
 
     //Look for start and stop asterisk
     int bc_start_idx = -1;
     int bc_stop_idx = -1;
-    int max_asterisk_start_bars = 9;//Maximum bars that can be passed before asterisk is found
+    int max_asterisk_start_bars = this->opts_->getValue<int>("C39_DEC_MAX_ASTERISK_START_BARS", 9);
 
+    // Test for verse and inverse
     for (int rev = 0; rev <= 1; rev++) {
         for (int j = 0; j < max_asterisk_start_bars; j++) {
             std::map<std::string, char>::const_iterator it;
-            std::string curr = bc_string.substr(j, 9);
+            std::string curr = bc_string.substr(j, C39_BARS_PER_CHAR);
             it = DECODINGMAP_C39.find(curr);
             if(it == DECODINGMAP_C39.end()){
                 //cout << "NOPE." << endl;
             } else if (it->second == C39_SENTINEL) {
-                bc_start_idx = j + 10;
+                bc_start_idx = j + C39_BARS_PER_CHAR + 1;
                 //cout << "FOUND:" << it->second << endl;
             }
         }
 
         
-        for (int j = bc_string.length() - 9; j > bc_string.length() - max_asterisk_start_bars - 9; j--) {
+        for (int j = bc_string.length() - C39_BARS_PER_CHAR; j > bc_string.length() - max_asterisk_start_bars - C39_BARS_PER_CHAR; j--) {
             std::map<std::string, char>::const_iterator it;
-            std::string curr = bc_string.substr(j, 9);
+            std::string curr = bc_string.substr(j, C39_BARS_PER_CHAR);
             it = DECODINGMAP_C39.find(curr);
             if (it == DECODINGMAP_C39.end()) {
-                //cout << "NOPE." << endl;
+                // ..
             } else if (it->second == C39_SENTINEL) {
                 bc_stop_idx = j;
-                //cout << "FOUND:" << it->second << endl;
+                std::cout << "FOUND:" << it->second << std::endl;
             }
         }
         if (bc_start_idx != -1 && bc_stop_idx != -1) { 
-            break; //Found!
-        } else { //Not found!
-            //Try in reverse, reverse the string
-            
+            break; // Two asterisks found.
+        } else { // Did not find two asterisks.
+            // Try the next iteration in reverse if applicable
             std::reverse(std::begin(bc_string), std::end(bc_string));
         }
     }
@@ -212,21 +213,23 @@ int DecoderCode39::DecodeBinary(cv::Mat image, openbarcode::code * current_code)
         return RET_NONE_FOUND;
     }
 
-    std::cout << "bc_start_idx=" << bc_start_idx << " bc_stop_idx=" << bc_stop_idx << std::endl;
+    // std::cout << "bc_start_idx=" << bc_start_idx << " bc_stop_idx=" << bc_stop_idx << std::endl;
 
-    std::string strRaw = bc_string.substr(bc_start_idx, bc_stop_idx-bc_start_idx + 9);
+    std::string strRaw = bc_string.substr(bc_start_idx, bc_stop_idx - bc_start_idx + C39_BARS_PER_CHAR);
 
-    /*if (((bc_stop_idx-bc_start_idx)%10)!=0){
+    /*
+    if (((bc_stop_idx-bc_start_idx)%10)!=0){
         string strErr = "Code39 bar count not a modulo of 10, len=" + std::to_string(bc_stop_idx-bc_start_idx);
         cout << strErr << endl;
         return vecStripecodes;
-    }*/
+    }
+    */
     
-    //Decode the bitch
-    std::string barcode;
-    bool decodingAllOk = true;
-    for (int j = bc_start_idx; j < bc_stop_idx; j += 10) {
-        std::string curr = bc_string.substr(j, 9);
+    // Decode the whole data from asterisk to asterisk
+    std::string barcode_str;
+    bool decoding_all_ok = true;
+    for (int j = bc_start_idx; j < bc_stop_idx; j += C39_BARS_PER_CHAR + 1) {
+        std::string curr = bc_string.substr(j, C39_BARS_PER_CHAR);
         //cout << j << " curr=" << curr << endl;
 
         std::map<std::string, char>::const_iterator it;
@@ -234,21 +237,20 @@ int DecoderCode39::DecodeBinary(cv::Mat image, openbarcode::code * current_code)
         if(it == DECODINGMAP_C39.end()){
             std::string strErr = "Code 39 unknown decoding sequence: '" + curr + "' from position " + std::to_string(j); 
             std::cout << strErr << std::endl;
-            //return vecStripecodes;
-            decodingAllOk=false;
+            decoding_all_ok = false;
             break;
         } else {
-            barcode +=(it->second);
+            barcode_str += (it->second);
         }
     }
-    if (!decodingAllOk) {
-        std::string strErr = "Code 39 found unknown decoding sequence somewhere, ignoring..";
+    if (!decoding_all_ok) {
+        std::cout <<  "Code 39 found unknown decoding sequence somewhere, ignoring.." << std::endl;
         return RET_NONE_FOUND;
     }
 
     //cout << "BARCODE: " << barcode << " raw=" << strRaw << endl;
 
-    current_code->data = barcode;
+    current_code->data = barcode_str;
     current_code->data_raw = strRaw;
 
     return RET_SUCCESS;
@@ -278,7 +280,6 @@ int DecoderCode39::Decode(cv::Mat image, openbarcode::code * current_code) {
     //Binarize
     util::autoClipBrighten(matBarcode1D, 0.06, 0.94);
     util::autoClipBrighten(matBarcode1Dmax, 0.06, 0.94);
-
     
 //    if(debugstripecode){
 //        imwrite("/Users/tzaman/Desktop/bc/bc2D_" + std::to_string(i) + ".tif", image);

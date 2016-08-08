@@ -38,7 +38,7 @@ class Decoder {
     
     virtual int Decode(cv::Mat, openbarcode::code *);
 
- private:
+ protected:
     Options * opts_;
 
  private:

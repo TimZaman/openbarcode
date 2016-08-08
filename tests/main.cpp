@@ -17,8 +17,12 @@
 ---------------------------------------------------------------------------------
 */
 
+#include <unistd.h>
 #include <iostream>
 #include <string>
+
+#include <dirent.h>
+
 #include <opencv2/opencv.hpp>
 #include "gtest/gtest.h"
 
@@ -28,7 +32,7 @@
 #include "libopenbarcode/decoder.h" 
 #include "libopenbarcode/decoder_code39.h" 
 
-static const std::string image_directory = "../../sample_images/";
+std::string sample_folder = "../sample_images/";
 
 double squareroot (const double val) {
     return val / 2.0;
@@ -47,28 +51,88 @@ TEST(test_case_name, test_name) {
 }
 */
 
-TEST (Code39Test, SampleImages) {
-    cv::Mat im = cv::imread(image_directory + "c39.png");
-    std::vector< openbarcode::Decoder * > decoders;
-    openbarcode::Options opts;
-    decoders.push_back(new openbarcode::DecoderCode39(&opts));
-    openbarcode::DetectorBarcode dt_bc(&opts, decoders);
-    dt_bc.setImage(im);
-    dt_bc.Detect();
-    dt_bc.Decode();
-
-    std::vector< std::string > found_codes = dt_bc.getCodeStrings();
-
-    ASSERT_EQ(1, found_codes.size());
-
-    ASSERT_EQ("BM001190117", found_codes[0]);
-
-    // Clean-up
-    for (int i = 0; i < decoders.size(); i++) delete decoders[i];
+std::vector< std::string > dirToFilesVec(std::string path) {
+    std::vector< std::string > files_vec;
+    DIR *dir;
+    struct dirent *ent;
+    if ((dir = opendir (path.c_str())) != NULL) {
+        /* print all the files and directories within directory */
+        while ((ent = readdir (dir)) != NULL) {
+            
+            if (ent->d_name[0] != '.') {
+                printf ("%s\n", ent->d_name);
+                files_vec.push_back(std::string(ent->d_name));
+            }
+        }
+        closedir (dir);
+    } else {
+        std::cerr << "Failed opening directory : " << path << std::endl;
+        exit(-1);
+    }
+    return files_vec;
 }
 
 
+std::string splitFilename(const std::string& str, int iopt) {
+    // Splits a filename into a stem and extension; 0:stem 1:ext
+    size_t found = str.find_last_of(".");
+    if (iopt == 0) {
+        return str.substr(0, found);
+    } else {
+        return str.substr(found + 1);
+    }
+}
+
+
+TEST (Code39Test, SampleImages) {
+    std::string path = sample_folder + "/C39/";
+    std::vector< std::string > files_vec = dirToFilesVec(path);
+    for (int fi = 0; fi < files_vec.size(); fi++) {
+        std::string expected_data = splitFilename(files_vec[fi], 0);
+        cv::Mat im = cv::imread(path + files_vec[fi]);
+        std::vector< openbarcode::Decoder * > decoders;
+        openbarcode::Options opts;
+        decoders.push_back(new openbarcode::DecoderCode39(&opts));
+        openbarcode::DetectorBarcode dt_bc(&opts, decoders);
+        dt_bc.setImage(im);
+        dt_bc.Detect();
+        dt_bc.Decode();
+
+        std::vector< std::string > found_codes = dt_bc.getCodeStrings();
+
+        ASSERT_EQ(1, found_codes.size());
+        ASSERT_EQ(expected_data, found_codes[0]);
+
+        // Clean-up
+        for (int d = 0; d < decoders.size(); d++) delete decoders[d];
+    }
+}
+
+void printHelp() {
+    std::cout << "Usage:" << std::endl;
+    std::cout << " -f  sets folder with sample images" << std::endl;
+    // std::cout << " -h  prints help message" << std::endl;
+    std::cout << " .. GoogleTest flags are also supported" << std::endl;
+}
+
 int main(int argc, char **argv) {
+    if (argc <= 1) {
+        printHelp();
+    }
+
     ::testing::InitGoogleTest(&argc, argv);
+    for (int i = 1; i < argc; i++) {
+        std::cout << argv[i] << std::endl;
+        if (std::string(argv[i]).compare("-f") == 0) {
+            if (argc >= i+1) {
+                sample_folder = argv[i + 1];
+                std::cout << "sample_folder set to : " << sample_folder << std::endl;  
+            } else {
+                std::cerr << "No sample folder argument supplied." << std::endl;
+                exit(-1);
+            }
+        }
+    }
+
     return RUN_ALL_TESTS();
 }
