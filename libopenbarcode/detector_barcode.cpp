@@ -131,28 +131,24 @@ int DetectorBarcode::Detect() {
         double height = std::max(rotRect.size.width, rotRect.size.height);
 
         //Check the length
-        if (height < bar_height_px_min){
+        if (height < bar_height_px_min) {
             //Stripe too small
             continue;
         }
 
-        if (height > bar_height_px_max ){
+        if (height > bar_height_px_max ) {
             //Stripe too long
             continue;
         }
 
-
-        //cout << i << " rotRect: sz=" << rotRect.size << " cp=" << rotRect.center << " a=" << rotRect.angle << " ar=" << ar << endl;
-
-
         Rect rCrop = boundingRect(contours[i]);
 
         //Below parameter is dynamic, plz note
-        double min_area_fill=0.15;// = 0.25 ;// 0.4 means 40% of the bounding rectangle of the contour needs to be filled
+        double min_area_fill = 0.15;// = 0.25 ;// 0.4 means 40% of the bounding rectangle of the contour needs to be filled
         //The min_area_fill threshold should be dependent on the width in pixels, because there's more noise in thinner ones
-        if (width<3){
+        if (width < 3){
             min_area_fill = 0.05;
-        } else if (width <5){
+        } else if (width < 5){
             min_area_fill = 0.10;
         }
 
@@ -161,23 +157,23 @@ int DetectorBarcode::Detect() {
         int fullarea = rCrop.area();
 
         
-        if ( (double(cArea)/double(fullarea)) < min_area_fill){
+        if ( (double(cArea) / double(fullarea)) < min_area_fill) {
             continue;
         }
 
         //cout << i << " fullarea=" << fullarea << " carea=" << cArea << endl;
 
-        if (debugstripecode){
+        if (debugstripecode) {
             imwrite("/Users/tzaman/Desktop/seg/" + std::to_string(i) +  ".tif", matImageK(rCrop));
         }
         stripeCandidates.push_back(rotRect);
     }
 
 
-    if (debugstripecode){
+    if (debugstripecode) {
         Mat matBarcodeFull = this->image_.clone();
-        for (int j=0; j<stripeCandidates.size(); j++){
-            util::rectangle(matBarcodeFull, stripeCandidates[j], cv::Scalar(255,0,0), 2);
+        for (int j = 0; j < stripeCandidates.size(); j++){
+            util::rectangle(matBarcodeFull, stripeCandidates[j], cv::Scalar(255, 0, 0), 2);
         }
         imwrite("/Users/tzaman/Desktop/bc/_candidates.tif", matBarcodeFull);
     }
@@ -185,7 +181,7 @@ int DetectorBarcode::Detect() {
 
     //cout << "stripeCandidates.size()=" << stripeCandidates.size() << endl;
 
-    if (stripeCandidates.size() < min_inliers){
+    if (stripeCandidates.size() < min_inliers) {
         string strErr = "Code 39 did not find enough bars to accurately make a code.";
         cout << strErr << endl;
         return RET_NONE_FOUND;
@@ -197,10 +193,10 @@ int DetectorBarcode::Detect() {
     std::vector<std::vector<cv::RotatedRect> > vecGroupRects(vecGroupIdxs.size());
 
     //Relate indexes to points and add to group vector
-    for (int i=0; i<vecGroupIdxs.size(); i++){
+    for (int i = 0; i < vecGroupIdxs.size(); i++) {
         //vecGroupPts[i].resize(vecGroupIdxs[i].size());
         vecGroupRects[i].resize(vecGroupIdxs[i].size());
-        for (int j=0; j<vecGroupIdxs[i].size(); j++){
+        for (int j = 0; j < vecGroupIdxs[i].size(); j++){
             //cout << i << "," << j << endl;
             //vecGroupPts[i][j] = vecPtRectCenter[vecGroupIdxs[i][j]];
             vecGroupRects[i][j] = stripeCandidates[vecGroupIdxs[i][j]];

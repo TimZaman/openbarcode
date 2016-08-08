@@ -55,6 +55,8 @@ class Detector {
         return only_strings;
     }
 
+    cv::Mat drawAllCandidates();
+
  protected:
     std::vector< openbarcode::code > code_candidates_;
     std::vector< openbarcode::code > codes_;
@@ -64,6 +66,7 @@ class Detector {
     cv::Mat image_;
  private:
     DISALLOW_COPY_AND_ASSIGN(Detector);
+    std::map<int, int> rejection_counter_;
 
 };
 

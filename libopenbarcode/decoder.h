@@ -43,6 +43,7 @@ class Decoder {
 
  private:
     DISALLOW_COPY_AND_ASSIGN(Decoder);
+    std::map<int, int> rejection_counter_;
 
 };
 

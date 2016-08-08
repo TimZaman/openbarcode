@@ -27,16 +27,16 @@
 #include "gtest/gtest.h"
 
 #include "libopenbarcode/options.h"  
+
 #include "libopenbarcode/detector.h" 
 #include "libopenbarcode/detector_barcode.h" 
+#include "libopenbarcode/detector_dmtx.h" 
+
 #include "libopenbarcode/decoder.h" 
 #include "libopenbarcode/decoder_code39.h" 
+#include "libopenbarcode/decoder_dmtx.h" 
 
 std::string sample_folder = "../sample_images/";
-
-double squareroot (const double val) {
-    return val / 2.0;
-}
 
 /*
 TEST(test_case_name, test_name) {
@@ -56,11 +56,9 @@ std::vector< std::string > dirToFilesVec(std::string path) {
     DIR *dir;
     struct dirent *ent;
     if ((dir = opendir (path.c_str())) != NULL) {
-        /* print all the files and directories within directory */
+        // print all the files and directories within directory
         while ((ent = readdir (dir)) != NULL) {
-            
             if (ent->d_name[0] != '.') {
-                printf ("%s\n", ent->d_name);
                 files_vec.push_back(std::string(ent->d_name));
             }
         }
@@ -75,15 +73,15 @@ std::vector< std::string > dirToFilesVec(std::string path) {
 
 std::string splitFilename(const std::string& str, int iopt) {
     // Splits a filename into a stem and extension; 0:stem 1:ext
-    size_t found = str.find_last_of(".");
+    //size_t found = str.find_last_of(".");
+    size_t found = str.find_first_of(".");
     if (iopt == 0) {
         return str.substr(0, found);
     } else {
         return str.substr(found + 1);
     }
 }
-
-
+/*
 TEST (Code39Test, SampleImages) {
     std::string path = sample_folder + "/C39/";
     std::vector< std::string > files_vec = dirToFilesVec(path);
@@ -99,6 +97,36 @@ TEST (Code39Test, SampleImages) {
         dt_bc.Decode();
 
         std::vector< std::string > found_codes = dt_bc.getCodeStrings();
+
+        ASSERT_EQ(1, found_codes.size());
+        ASSERT_EQ(expected_data, found_codes[0]);
+
+        // Clean-up
+        for (int d = 0; d < decoders.size(); d++) delete decoders[d];
+    }
+}
+*/
+
+TEST (DmtxTest, ImagesNormal) {
+    std::string path = sample_folder + "/DMTX/normal/";
+    std::vector< std::string > files_vec = dirToFilesVec(path);
+    for (int fi = 0; fi < files_vec.size(); fi++) {
+        std::cout << "\t" << files_vec[fi] << std::endl;
+        std::string expected_data = splitFilename(files_vec[fi], 0);
+        cv::Mat im = cv::imread(path + files_vec[fi]);
+        std::vector< openbarcode::Decoder * > decoders;
+        openbarcode::Options opts;
+        decoders.push_back(new openbarcode::DecoderDmtx(&opts));
+        openbarcode::DetectorDmtx dt_dmtx(&opts, decoders);
+        dt_dmtx.setImage(im);
+        dt_dmtx.Detect();
+        dt_dmtx.Decode();
+
+        std::vector< std::string > found_codes = dt_dmtx.getCodeStrings();
+
+        // Save candidates 
+        //cv::Mat mat_draw = dt_dmtx.drawAllCandidates();
+        //cv::imwrite("/Users/tzaman/Desktop/bc/dmtx_" + std::to_string(fi) + ".png", mat_draw);
 
         ASSERT_EQ(1, found_codes.size());
         ASSERT_EQ(expected_data, found_codes[0]);

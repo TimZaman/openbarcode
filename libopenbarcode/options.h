@@ -36,35 +36,48 @@
 
 namespace openbarcode {
 
+
+/*
+ * Rejection Reasons
+ */
+enum { 
+      REJECT_DEC_DMTX_TOO_FEW_TIMING_POINTS,
+      REJECT_DEC_DMTX_DECODING_FAILED
+     };
+
 struct code {
     int code_type;
     std::string data;
     std::string data_raw;
     cv::RotatedRect rotrect;
+    std::map<int, int> rejection_counter;
 };
 
 /*
  * Return values
  */
-enum { RET_SUCCESS    = 0, 
-       RET_NONE_FOUND = 1,
-       RET_EPIC_FAIL = 1337
+enum {
+      RET_SUCCESS    = 0, 
+      RET_NONE_FOUND = 1,
+      RET_EPIC_FAIL = 1337
      };
 
 /*
  * All possible option keys
  */
-enum { OPT_CODETYPE   = 0,
-       OPT_SEARCH_MULTIPLE = 1,
-       OPT_DPI = 2,
+enum {
+      OPT_CODETYPE   = 0,
+      OPT_SEARCH_MULTIPLE = 1,
+      OPT_DPI = 2,
      };
 
 /*
  * Detector code types
  */ 
-enum { DET_BARCODE    = 1 << 0, // 0x01 (any code with bars)
-       DET_DATAMATRIX = 1 << 1, // 0x02
-       DET_QR         = 1 << 2, // 0x04
+enum {
+      DET_BARCODE    = 1 << 0, // 0x01 (any code with bars)
+      DET_DATAMATRIX = 1 << 1, // 0x02
+      DET_QR         = 1 << 2, // 0x04
      };
 
 class Options {
