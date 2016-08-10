@@ -35,7 +35,7 @@ class Detector {
  public:
     Detector(Options *, Decoder *);
     Detector(Options *, std::vector< Decoder * >);
-    ~Detector();
+    virtual ~Detector();
 
     void setImage(cv::Mat);
 

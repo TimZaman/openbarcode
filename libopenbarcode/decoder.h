@@ -34,7 +34,7 @@ class Decoder {
 
  public:
     Decoder(Options *);
-    ~Decoder();
+    virtual ~Decoder();
     
     virtual int Decode(cv::Mat, openbarcode::code *);
 
