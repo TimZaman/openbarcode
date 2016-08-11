@@ -61,13 +61,11 @@ namespace openbarcode {
 
 
 DecoderCode39::DecoderCode39(Options * opts) : Decoder(opts) {
-    std::cout << "DecoderCode39::DecoderCode39()" << std::endl;
-
+    // std::cout << "DecoderCode39::DecoderCode39()" << std::endl;
 }
 
 DecoderCode39::~DecoderCode39() {
-    std::cout << "DecoderCode39::~DecoderCode39()" << std::endl;
-
+    // std::cout << "DecoderCode39::~DecoderCode39()" << std::endl;
 }
 
 
@@ -195,7 +193,7 @@ int DecoderCode39::DecodeBinary(cv::Mat image, openbarcode::code * current_code)
                 // ..
             } else if (it->second == C39_SENTINEL) {
                 bc_stop_idx = j;
-                std::cout << "FOUND:" << it->second << std::endl;
+                // std::cout << "FOUND:" << it->second << std::endl;
             }
         }
         if (bc_start_idx != -1 && bc_stop_idx != -1) { 
@@ -208,12 +206,10 @@ int DecoderCode39::DecodeBinary(cv::Mat image, openbarcode::code * current_code)
 
 
     if (bc_start_idx == -1) {
-        std::string strErr = "Code 39 start asterisk not found.";
-        std::cout << strErr << std::endl;
+        // std::cout << "Code 39 start asterisk not found." << std::endl;
         return RET_NONE_FOUND;
     } else if (bc_stop_idx == -1) {
-        std::string strErr = "Code 39 stop asterisk not found.";
-        std::cout << strErr << std::endl;
+        // std::cout << "Code 39 stop asterisk not found." << std::endl;
         return RET_NONE_FOUND;
     }
 
@@ -239,8 +235,7 @@ int DecoderCode39::DecodeBinary(cv::Mat image, openbarcode::code * current_code)
         std::map<std::string, char>::const_iterator it;
         it = DECODINGMAP_C39.find(curr);
         if(it == DECODINGMAP_C39.end()){
-            std::string strErr = "Code 39 unknown decoding sequence: '" + curr + "' from position " + std::to_string(j); 
-            std::cout << strErr << std::endl;
+            // std::cout << "Code 39 unknown decoding sequence: '" << curr << "' from position " << std::to_string(j) << std::endl;
             decoding_all_ok = false;
             break;
         } else {
@@ -248,7 +243,7 @@ int DecoderCode39::DecodeBinary(cv::Mat image, openbarcode::code * current_code)
         }
     }
     if (!decoding_all_ok) {
-        std::cout <<  "Code 39 found unknown decoding sequence somewhere, ignoring.." << std::endl;
+        // std::cout <<  "Code 39 found unknown decoding sequence somewhere, ignoring.." << std::endl;
         return RET_NONE_FOUND;
     }
 
@@ -261,7 +256,7 @@ int DecoderCode39::DecodeBinary(cv::Mat image, openbarcode::code * current_code)
 }
 
 int DecoderCode39::Decode(cv::Mat image, openbarcode::code * current_code) {
-    std::cout << "DecoderCode39::Decode()" << std::endl;
+    // std::cout << "DecoderCode39::Decode()" << std::endl;
 
     // Convert to grayscale
     cvtColor(image, image, cv::COLOR_BGR2GRAY); //a sad slow maybe

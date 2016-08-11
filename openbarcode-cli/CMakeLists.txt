@@ -52,17 +52,13 @@ else()
 endif()
 
 if (1) # USE LOCAL COMPILED VERSION
-	INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../)
-	#INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libopenbarcode/toolkit)
-	INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libopenbarcode)
+	#INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libopenbarcode)
+	INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/..)
 	LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../lib)
 else () # USE INSTALLED LIB AND HEADERS
-	INCLUDE_DIRECTORIES(/usr/local/openbarcode/include/ )
+	INCLUDE_DIRECTORIES(/usr/local/include/openbarcode/ )
 	LINK_DIRECTORIES(/usr/local/lib)
 endif()
-
-
-
 
 #OpenCV
 find_package(OpenCV 3 REQUIRED)
@@ -74,9 +70,3 @@ SET_TARGET_PROPERTIES(openbarcode-bin PROPERTIES OUTPUT_NAME openbarcode) #worka
 
 # Link the target to the libraries
 target_link_libraries( openbarcode-bin openbarcode stdc++ ${OpenCV_LIBS})
-
-
-
-
-
-

@@ -23,20 +23,20 @@ using namespace cv;
 namespace openbarcode {
 
 DetectorBarcode::DetectorBarcode(Options * opts, Decoder * dc) : Detector(opts, dc) {
-    std::cout << "DetectorBarcode::DetectorBarcode()" << std::endl;
+    // std::cout << "DetectorBarcode::DetectorBarcode()" << std::endl;
 }
 
 DetectorBarcode::DetectorBarcode(Options * opts, std::vector< Decoder * > decoders) : Detector(opts, decoders) {
-    std::cout << "DetectorBarcode::DetectorBarcode()" << std::endl;
+    // std::cout << "DetectorBarcode::DetectorBarcode()" << std::endl;
 }
 
 DetectorBarcode::~DetectorBarcode() {
-    std::cout << "DetectorBarcode::~DetectorBarcode()" << std::endl;
+    // std::cout << "DetectorBarcode::~DetectorBarcode()" << std::endl;
 
 }
 
 int DetectorBarcode::Detect() {
-    std::cout << "DetectorBarcode::Detect()" << std::endl;
+    // std::cout << "DetectorBarcode::Detect()" << std::endl;
 
     assert(this->image_.data != NULL);
 
@@ -97,8 +97,7 @@ int DetectorBarcode::Detect() {
     //cout << "contours.size()=" << contours.size() << endl;
     
     if (contours.size() == 0) {
-        string strErr = "No contours found.";
-        cout << strErr << endl;
+        // cout << "No contours found." << endl;
         return RET_NONE_FOUND;
     }
 
@@ -182,8 +181,7 @@ int DetectorBarcode::Detect() {
     //cout << "stripeCandidates.size()=" << stripeCandidates.size() << endl;
 
     if (stripeCandidates.size() < min_inliers) {
-        string strErr = "Code 39 did not find enough bars to accurately make a code.";
-        cout << strErr << endl;
+        // cout << "Code 39 did not find enough bars to accurately make a code." << endl;
         return RET_NONE_FOUND;
     }
     
@@ -227,8 +225,7 @@ int DetectorBarcode::Detect() {
     //cout << "vecGroupPts.size()=" << vecGroupPts.size() << endl;
 
     if (vecGroupIdxs.size() == 0) {
-        string strErr = "Code 39 failed to ransac bars in a line.";
-        cout << strErr << endl;
+        // cout << "Code 39 failed to ransac bars in a line." << endl;
         return RET_NONE_FOUND;
     }
 
@@ -242,8 +239,7 @@ int DetectorBarcode::Detect() {
     }
 
     if (vecLines.size() == 0) {
-        string strErr = "Code 39 failed to ransac bars in a line.";
-        cout << strErr << endl;
+        // cout << "Code 39 failed to ransac bars in a line." << endl;
         return RET_NONE_FOUND;
     } else {
         //cout << "Code39 ransac succesfull" << endl;
@@ -270,7 +266,7 @@ int DetectorBarcode::Detect() {
 
     for (int i=0; i < vecLines.size(); i++){
         int numpts = vecVecInlierIdx[i].size();
-        cout << "Potential barcode #" << i << " with " << numpts << " points." << endl;
+        // cout << "Potential barcode #" << i << " with " << numpts << " points." << endl;
 
         
         //double angle=atan2(vecLines[i][1],vecLines[i][0])*180/M_PI; //For some reason it clips from [-90,90]

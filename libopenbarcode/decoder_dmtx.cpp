@@ -22,17 +22,17 @@
 namespace openbarcode {
 
 DecoderDmtx::DecoderDmtx(Options * opts) : Decoder(opts) {
-    std::cout << "DecoderDmtx::DecoderDmtx()" << std::endl;
+    // std::cout << "DecoderDmtx::DecoderDmtx()" << std::endl;
 
 }
 
 DecoderDmtx::~DecoderDmtx() {
-    std::cout << "DecoderDmtx::~DecoderDmtx()" << std::endl;
+    // std::cout << "DecoderDmtx::~DecoderDmtx()" << std::endl;
 
 }
 
 int DecoderDmtx::Decode(cv::Mat image, openbarcode::code * current_code) {
-    std::cout << "DecoderDmtx::Decode()" << std::endl;
+    // std::cout << "DecoderDmtx::Decode()" << std::endl;
 
     std::string bcString = "";
     cv::Mat matImageK_orig;
@@ -210,7 +210,7 @@ int DecoderDmtx::Decode(cv::Mat image, openbarcode::code * current_code) {
 }
 
 std::string DecoderDmtx::doDmtxDecode(const cv::Mat &matImageIn, long timeout_ms) {
-    std::cout << "doDmtxDecode(..," << timeout_ms << ")" << std::endl;
+    // std::cout << "doDmtxDecode(..," << timeout_ms << ")" << std::endl;
     std::string string_libdmtx;
 
     int size_idx = getSizeIdxFromSymbolDimension(matImageIn.cols, matImageIn.rows);
@@ -230,11 +230,10 @@ std::string DecoderDmtx::doDmtxDecode(const cv::Mat &matImageIn, long timeout_ms
 
     if ((msg != NULL) && (msg->output[0] != NULL)) {
         string_libdmtx = std::string(reinterpret_cast<char*>(msg->output));
-        std::cout << " string_libdmtx = " << string_libdmtx << std::endl;
+        // std::cout << " string_libdmtx = " << string_libdmtx << std::endl;
         dmtxMessageDestroy(&msg);
     }
 
-    std::cout << "END doDmtxDecode()" << std::endl;
     return string_libdmtx;
 }
 

@@ -84,12 +84,12 @@ class Options {
 
  public:
     Options(){
-        std::cout << "Options::Options()" << std::endl;
+        // std::cout << "Options::Options()" << std::endl;
 
     }
 
     ~Options(){
-        std::cout << "Options::~Options()" << std::endl;
+        // std::cout << "Options::~Options()" << std::endl;
     }
 
     template<typename _T>

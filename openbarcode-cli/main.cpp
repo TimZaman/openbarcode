@@ -57,57 +57,57 @@ std::vector< std::string > dirToFilesVec(std::string path) {
 }
 
 int main(int argc, char* argv[] ) {
-	std::cout << "main() : this program provides a libopenbarcode example." << std::endl;
-	std::cout << "OPENBARCODE_VERSION   = " << OPENBARCODE_VERSION << std::endl;
-	std::cout << "OPENBARCODE_BUILDDATE = " << OPENBARCODE_BUILDDATE << std::endl;
+    std::cout << "main() : this program provides a libopenbarcode example." << std::endl;
+    std::cout << "OPENBARCODE_VERSION   = " << OPENBARCODE_VERSION << std::endl;
+    std::cout << "OPENBARCODE_BUILDDATE = " << OPENBARCODE_BUILDDATE << std::endl;
 
-	// Create the options
-	openbarcode::Options opts;
-	//opts.set
+    // Create the options
+    openbarcode::Options opts;
+    //opts.set
 
-	opts.setValue("int", 1337);
-	opts.setValue("string", "test");
+    opts.setValue("int", 1337);
+    opts.setValue("string", "test");
 
-	//cout << opts.getValue("int") << " ; " << opts.getValue("string") << endl;
-	cout << opts.getValue<int>("int") << endl;
-	int i = opts.getValue<int>("int");
+    //cout << opts.getValue("int") << " ; " << opts.getValue("string") << endl;
+    cout << opts.getValue<int>("int") << endl;
+    int i = opts.getValue<int>("int");
 
-	cout << opts.getValue<int>("default-test", 1234) << endl;
+    cout << opts.getValue<int>("default-test", 1234) << endl;
 
-	//string files_dir = "/Users/tzaman/Dropbox/code/openbarcode/sample_images/C39/";
-	string files_dir = "/Users/tzaman/Dropbox/code/openbarcode/sample_images/DMTX/";
-	vector<string> files = dirToFilesVec(files_dir);
+    //string files_dir = "/Users/tzaman/Dropbox/code/openbarcode/sample_images/C39/";
+    string files_dir = "/Users/tzaman/Dropbox/code/openbarcode/sample_images/DMTX/";
+    vector<string> files = dirToFilesVec(files_dir);
 
-	for (int i = 0; i < files.size(); i++) {
-		if (files[i].size()!=8) {
-			continue;
-		}
+    for (int i = 0; i < files.size(); i++) {
+        if (files[i].size()!=8) {
+            continue;
+        }
 
-		cout << files[i] << endl;
+        cout << files[i] << endl;
 
-		// Load a sample image
-		cv::Mat im = cv::imread(files_dir + files[i]);
-		
-		// Create the decoder(s)
-		std::vector< openbarcode::Decoder * > decoders;
-		decoders.push_back(new openbarcode::DecoderDmtx(&opts));
-		openbarcode::DetectorDmtx dt(&opts, decoders);
-		//decoders.push_back(new openbarcode::DecoderCode39(&opts));
-		//openbarcode::DetectorBarcode dt(&opts, decoders);
-		dt.setImage(im);
-		dt.Detect();
-		dt.Decode();
+        // Load a sample image
+        cv::Mat im = cv::imread(files_dir + files[i]);
+        
+        // Create the decoder(s)
+        std::vector< openbarcode::Decoder * > decoders;
+        decoders.push_back(new openbarcode::DecoderDmtx(&opts));
+        openbarcode::DetectorDmtx dt(&opts, decoders);
+        //decoders.push_back(new openbarcode::DecoderCode39(&opts));
+        //openbarcode::DetectorBarcode dt(&opts, decoders);
+        dt.setImage(im);
+        dt.Detect();
+        dt.Decode();
 
 
-		// Rename
-		std::vector< std::string > found_codes = dt.getCodeStrings();
-		if (found_codes.size() < 1) {
-			exit(-1);
-		}
-		int rc = std::rename((files_dir + files[i]).c_str(), (files_dir + found_codes[0] + ".jpg").c_str() ); 
+        // Rename
+        std::vector< std::string > found_codes = dt.getCodeStrings();
+        if (found_codes.size() < 1) {
+            exit(-1);
+        }
+        int rc = std::rename((files_dir + files[i]).c_str(), (files_dir + found_codes[0] + ".jpg").c_str() ); 
 
-		for (int d = 0; d < decoders.size(); d++) delete decoders[d];
-	}
+        for (int d = 0; d < decoders.size(); d++) delete decoders[d];
+    }
 
-	std::cout << "END main()" << std::endl;
+    std::cout << "END main()" << std::endl;
 }

@@ -22,20 +22,20 @@ using namespace cv;
 namespace openbarcode {
 
 DetectorDmtx::DetectorDmtx(Options * opts, Decoder * dc) : Detector(opts, dc) {
-    std::cout << "DetectorDmtx::DetectorDmtx()" << std::endl;
+    // std::cout << "DetectorDmtx::DetectorDmtx()" << std::endl;
 }
 
 DetectorDmtx::DetectorDmtx(Options * opts, std::vector< Decoder * > decoders) : Detector(opts, decoders) {
-    std::cout << "DetectorDmtx::DetectorDmtx()" << std::endl;
+    // std::cout << "DetectorDmtx::DetectorDmtx()" << std::endl;
 }
 
 DetectorDmtx::~DetectorDmtx() {
-    std::cout << "DetectorDmtx::~DetectorDmtx()" << std::endl;
+    // std::cout << "DetectorDmtx::~DetectorDmtx()" << std::endl;
 
 }
 
 int DetectorDmtx::Detect() {
-    std::cout << "DetectorDmtx::Detect()" << std::endl;
+    // std::cout << "DetectorDmtx::Detect()" << std::endl;
 
     // @TODO(tzaman): Convert 16bit input to 8bit
     const int dpi = 300;
