@@ -7,8 +7,6 @@
 */
 
 #include <iostream>
-#include <string>
-#include <vector>
 
 #include "libopenbarcode/toolkit/utils_opencv.h"
 #include "libopenbarcode/toolkit/utils_general.h"
@@ -59,8 +57,7 @@ static const std::map<std::string, char> DECODINGMAP_C39 = generateDecodingMap()
 
 namespace openbarcode {
 
-
-DecoderCode39::DecoderCode39(Options * opts) : Decoder(opts) {
+DecoderCode39::DecoderCode39(Options * opts) : DecoderBarcode(opts) {
     // std::cout << "DecoderCode39::DecoderCode39()" << std::endl;
 }
 
@@ -68,18 +65,20 @@ DecoderCode39::~DecoderCode39() {
     // std::cout << "DecoderCode39::~DecoderCode39()" << std::endl;
 }
 
-
 int DecoderCode39::DecodeBinary(cv::Mat image, openbarcode::code * current_code) {
     //stripeCode codeNow;
     //Walk the code and extract words
 
+    imwrite("/Users/tzaman/Desktop/bc/c39_image.png", image);
+
     std::vector<double> intervals_black;
     std::vector<double> intervals_white;
+
     //We will now perform smart measurement of the white and black stripes.
     char prev_char = image.at<char>(0);
-    int current_length=0;
+    int current_length = 0;
     for (int i = 1; i < image.rows * image.cols; i++) {
-        char current_char=image.at<char>(i);
+        char current_char = image.at<char>(i);
         current_length++;
         if (current_char != prev_char) {
             //Switch
@@ -127,15 +126,12 @@ int DecoderCode39::DecodeBinary(cv::Mat image, openbarcode::code * current_code)
     int lengthnow = 0;
     for (int i = 0; i < image.rows * image.cols; i++) {
         char curbc = image.at<char>(i); //Current value (1/0)
-        if (curbc != prevbc) { //1/0 switch
+        if (curbc != prevbc) { // 1/0 (255/0) switch
             //if ((lengthnow > width_min) && (lengthnow < width_max)) {
             if ((lengthnow < width_max)) {
-                int division_width_threshold;
-                if (prevbc == 0) {
-                    division_width_threshold = width_wide_narrow_division_black;
-                } else {
-                    division_width_threshold = width_wide_narrow_division_white;
-                }
+                // The width division threshold is dependent on the color.
+                // This takes into account the amount of ink used (f.e. less ink -> narrow black division)
+                int division_width_threshold = prevbc == 0 ? width_wide_narrow_division_black : width_wide_narrow_division_white;
                 words.push_back(lengthnow > division_width_threshold ? 'w' : 'n');
                 
             } else {
@@ -254,7 +250,7 @@ int DecoderCode39::DecodeBinary(cv::Mat image, openbarcode::code * current_code)
 
     return RET_SUCCESS;
 }
-
+/*
 int DecoderCode39::Decode(cv::Mat image, openbarcode::code * current_code) {
     // std::cout << "DecoderCode39::Decode()" << std::endl;
 
@@ -319,7 +315,8 @@ int DecoderCode39::Decode(cv::Mat image, openbarcode::code * current_code) {
         return RET_NONE_FOUND;
     }
 
-// @TODO(tzaman): do the below in the detector.cpp ?
+// @TODO(tzaman): where to put the below? note the "**" part only occurs with c39. Other barcode-based codes have the same issue though
+//  .. so maybe make a function to check for doubles and extract those?
 //    //Make sure double barcode readout does not happen i.e.: '10007**10008', so split that up
 //    std::vector<std::string> split_codes;
 //    split_codes = util::split(codeNow.str, "**");
@@ -345,5 +342,6 @@ int DecoderCode39::Decode(cv::Mat image, openbarcode::code * current_code) {
 
     return RET_SUCCESS;
 }
+*/
 
-} //END NAMESPACE openbarcode
+} // namespace openbarcode

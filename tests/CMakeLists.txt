@@ -67,7 +67,7 @@ LINK_DIRECTORIES(/Users/tzaman/googletest/_build/googlemock/gtest)
 
 #OpenCV
 find_package(OpenCV 3 REQUIRED)
-set(OpenCV_LIBS opencv_core opencv_imgproc opencv_imgcodecs  ) #opencv3
+set(OpenCV_LIBS opencv_core opencv_imgproc opencv_imgcodecs) #opencv3
 
 # Add an executable compiled from .cpp
 add_executable( openbarcode-test main.cpp ) #openbarcode-bin name is a workaround, see below

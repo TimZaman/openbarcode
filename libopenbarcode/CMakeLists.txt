@@ -74,7 +74,7 @@ add_definitions(-DMYSHAREDLIB_LIBRARY)
 # Add an library compiled from .cpp
 add_library( openbarcode SHARED 
     detector.cpp detector_barcode.cpp detector_dmtx.cpp
-    decoder.cpp decoder_code39.cpp  decoder_dmtx.cpp
+    decoder.cpp decoder_barcode.cpp decoder_code39.cpp decoder_code128.cpp  decoder_dmtx.cpp
     toolkit/sort.h toolkit/utils_opencv.cpp toolkit/utils_general.cpp
     )
 

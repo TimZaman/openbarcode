@@ -33,7 +33,7 @@ namespace openbarcode {
 class Decoder {
 
  public:
-    Decoder(Options *);
+    explicit Decoder(Options *);
     virtual ~Decoder();
     
     virtual int Decode(cv::Mat, openbarcode::code *);

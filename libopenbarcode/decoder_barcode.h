@@ -1,8 +1,8 @@
 /**
 --------------------------------------------------------------------------------
--   Module      :   decoder_code39.h
+-   Module      :   decoder_barcode.cpp
 -   Description :   1D and 2D C++ Barcode Library
--   Author      :   Tim Zaman, 18-FEB-2016
+-   Author      :   Tim Zaman, 16-AUG-2016
 --------------------------------------------------------------------------------
 -   Copyright (c) 2016 Tim Zaman
 -   
@@ -17,26 +17,35 @@
  --------------------------------------------------------------------------------
 */
 
-#ifndef LIBOPENBARCODE_DECODER_CODE39_H_
-#define LIBOPENBARCODE_DECODER_CODE39_H_
+#ifndef LIBOPENBARCODE_DECODER_BARCODE_H_
+#define LIBOPENBARCODE_DECODER_BARCODE_H_
 
 #include <string>
 #include <vector>
-#include <map>
 
-#include "libopenbarcode/options.h"
-#include "libopenbarcode/decoder_barcode.h"
+#include <opencv2/opencv.hpp>
+
+#include "libopenbarcode/options.h"  
+#include "libopenbarcode/decoder.h"  
+#include "libopenbarcode/openbarcode_version.h"
 
 namespace openbarcode {
 
-class DecoderCode39 final : public DecoderBarcode {
+class DecoderBarcode : public Decoder {
+
  public:
-    explicit DecoderCode39(Options *);
-    ~DecoderCode39();
+    explicit DecoderBarcode(Options *);
+    virtual ~DecoderBarcode();
+
+    int Decode(cv::Mat, openbarcode::code *) override;
+
  protected:
-    int DecodeBinary(cv::Mat, openbarcode::code *) final;
+    virtual int DecodeBinary(cv::Mat, openbarcode::code *);
+
+ private:
+    DISALLOW_COPY_AND_ASSIGN(DecoderBarcode);
 };
 
 } // namespace openbarcode
 
-#endif // LIBOPENBARCODE_DECODER_CODE39_H_
+#endif // LIBOPENBARCODE_DECODER_BARCODE_H_

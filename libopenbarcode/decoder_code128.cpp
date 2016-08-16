@@ -13,7 +13,7 @@
 #include "libopenbarcode/toolkit/utils_opencv.h"
 #include "libopenbarcode/toolkit/utils_general.h"
 
-#include "libopenbarcode/decoder_code39.h"
+#include "libopenbarcode/decoder_code128.h"
 
 
 // From Wikipedia and using mapping defition inspired by Barcodesoft.com
@@ -112,13 +112,13 @@ static const char C128B_Characters[C128_NCHARACTERS] = {
         'X', 'Y', 'Z', '[', '\\', ']', '^', '_', '`', 'a', 'b', 'c', 'd', 'e', 
         'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 
         't', 'u', 'v', 'w', 'x', 'y', 'z', '{', '|', '}', '~', DEL, FNC3, FNC2, 
-        SHIFT, CODE_C, FNC4, CODE_A, NC1, START_A, START_B,START_C,STOP, 
+        SHIFT, CODE_C, FNC4, CODE_A, FNC1, START_A, START_B,START_C,STOP, 
         START_A,START_B,START_C,CODE_A, FNC4, CODE_C, STOP
    };
 
 // Note the numbers for C128 are converted in to chars, but should be 2-digit numbers.
 static const char C128C_Characters[C128_NCHARACTERS] = {
-        00, 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11,
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
         12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
         24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
         36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
@@ -130,17 +130,49 @@ static const char C128C_Characters[C128_NCHARACTERS] = {
         STOP, START_A, START_B, START_C, CODE_A, CODE_B, 99, STOP
    };
 
-static const char C128_Characters[3] = {C128A_Characters, C128B_Characters, C128C_Characters};
+//static const char *C128_Characters[3] = {C128A_Characters, C128B_Characters, C128C_Characters};
 
-static const std::map< std::string, char > generateDecodingMap() {
-    std::map<std::string, char> mapping;
+static const std::vector< std::map< std::string, char > > generateDecodingMap() {
+    std::vector< std::map<std::string, char> > mapping(3);
     for (int i = 0; i < C128_NCHARACTERS; i++) {
-        mapping[C128_Strings[i]] = C128_Characters[i];
+        mapping[0][C128_Strings[i]] = C128A_Characters[i];
+        mapping[1][C128_Strings[i]] = C128B_Characters[i];
+        mapping[2][C128_Strings[i]] = C128C_Characters[i];
     }
     return mapping;
 }
 
-static const std::map<std::string, char> DECODINGMAP_C128 = generateDecodingMap();
+static const std::vector< std::map<std::string, char> > DECODINGMAP_C128 = generateDecodingMap();
 
 
-// @TODO(tzaman)
+namespace openbarcode {
+
+DecoderCode128::DecoderCode128(Options * opts) : DecoderBarcode(opts) {
+    std::cout << "DecoderCode128::DecoderCode128()" << std::endl;
+}
+
+DecoderCode128::~DecoderCode128() {
+    std::cout << "DecoderCode128::~DecoderCode128()" << std::endl;
+}
+
+int DecoderCode128::DecodeBinary(cv::Mat image, openbarcode::code * current_code) {
+    std::cout << "DecoderCode128::DecodeBinary()" << std::endl;
+
+    imwrite("/Users/tzaman/Desktop/bc/c128_image.png", image);
+
+    return RET_NONE_FOUND;
+
+    //return RET_SUCCESS;
+}
+/*
+int DecoderCode128::Decode(cv::Mat image, openbarcode::code * current_code) {
+    std::cout << "DecoderCode128::Decode()" << std::endl;
+
+    imwrite("/Users/tzaman/Desktop/bc/c128_image.png", image);
+
+    return RET_NONE_FOUND;
+
+    //return RET_SUCCESS;
+}*/
+
+} //END NAMESPACE openbarcode
