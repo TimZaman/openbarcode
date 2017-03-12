@@ -71,15 +71,18 @@ endif()
 
 add_definitions(-DMYSHAREDLIB_LIBRARY)
 
+include_directories(libdmtx)
+
 # Add an library compiled from .cpp
 add_library( openbarcode SHARED 
     detector.cpp detector_barcode.cpp detector_dmtx.cpp
     decoder.cpp decoder_barcode.cpp decoder_code39.cpp decoder_code128.cpp  decoder_dmtx.cpp
     toolkit/sort.h toolkit/utils_opencv.cpp toolkit/utils_general.cpp
+    libdmtx/dmtx.c
     )
 
 # Link the target to the libraries
-target_link_libraries( openbarcode ${OpenCV_LIBS} dmtx stdc++ c++ )
+target_link_libraries( openbarcode ${OpenCV_LIBS} stdc++ c++ )
 
 
 # GIT STUFF
