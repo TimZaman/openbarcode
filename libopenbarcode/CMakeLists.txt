@@ -98,12 +98,38 @@ set_source_files_properties(${GITVERSIONHDR} PROPERTIES GENERATED TRUE HEADER_FI
 add_dependencies(openbarcode githeader)
 
 if(APPLE)
-    INSTALL(FILES _build/libopenbarcode.dylib  DESTINATION /usr/local/lib/ )
+    INSTALL(FILES ../lib/libopenbarcode.dylib  DESTINATION /usr/local/lib/ )
 else() #Linux
-    INSTALL(FILES _build/libopenbarcode.so  DESTINATION /usr/local/lib/ )
+    INSTALL(FILES ../lib/libopenbarcode.so  DESTINATION /usr/local/lib/ )
 endif()
 
-INSTALL(FILES openbarcode.h openbarcode_version.h DESTINATION /usr/local/include/libopenbarcode/ ) 
+INSTALL(
+    FILES
+    "decoder.h"
+    "decoder_code39.h"
+    "detector_barcode.h"
+    "openbarcode_version.h"
+    "decoder_barcode.h"
+    "decoder_dmtx.h"
+    "detector_dmtx.h"
+    "options.h"
+    "decoder_code128.h"
+    "detector.h"
+    "openbarcode.h"
+    DESTINATION
+    "/usr/local/include/libopenbarcode/"
+    ) 
+
+
+
+
+
+
+
+
+
+
+
 
 
 

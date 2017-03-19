@@ -23,8 +23,6 @@
 #include <string>
 #include <vector>
 
-#include "libopenbarcode/toolkit/sort.h"
-
 #include "libopenbarcode/options.h"  
 #include "libopenbarcode/openbarcode_version.h"
 

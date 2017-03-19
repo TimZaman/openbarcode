@@ -55,6 +55,14 @@ class Detector {
         return only_strings;
     }
 
+    std::vector< openbarcode::code * > getCodes(){
+        std::vector< openbarcode::code * > p_codes;
+        for (int i=0; i<this->codes_.size(); i++){
+            p_codes.push_back(&this->codes_[i]);
+        }
+        return p_codes;
+    }
+
     cv::Mat drawAllCandidates();
 
  protected:

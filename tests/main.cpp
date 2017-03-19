@@ -31,13 +31,13 @@
 
 #include "libopenbarcode/options.h"  
 
-#include "libopenbarcode/detector.h" 
-#include "libopenbarcode/detector_barcode.h" 
-#include "libopenbarcode/detector_dmtx.h" 
+#include "libopenbarcode/detector.h"
+#include "libopenbarcode/detector_barcode.h"
+#include "libopenbarcode/detector_dmtx.h"
 
-#include "libopenbarcode/decoder.h" 
-#include "libopenbarcode/decoder_code39.h" 
-#include "libopenbarcode/decoder_dmtx.h" 
+#include "libopenbarcode/decoder.h"
+#include "libopenbarcode/decoder_code39.h"
+#include "libopenbarcode/decoder_dmtx.h"
 
 namespace testing
 {
